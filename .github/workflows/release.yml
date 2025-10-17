@@ -50,9 +50,9 @@ jobs:
           git config user.name "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
 
-      - name: Release
+      - name: Semantic Release
         env:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: |
-          semantic-release version --changelog --verbose
-          semantic-release publish --verbose
+          semantic-release --verbose version --changelog
+          semantic-release --verbose publish
