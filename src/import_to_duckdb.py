@@ -136,7 +136,7 @@ class DuckDBImporter:
             return True
 
         except Exception as e:
-            print(f"[ERROR] Echec import {filename}: {e}")
+            print(f"[ERROR] Échec import {filename}: {e}")
             return False
 
 

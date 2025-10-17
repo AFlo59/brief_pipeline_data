@@ -1,5 +1,5 @@
 from pathlib import Path
-from import_to_duckdb import DuckDBImporter  # adapte le chemin si besoin
+from import_to_duckdb import DuckDBImporter  # adapt the path if needed
 
 db = DuckDBImporter("data/database/DUCKDB.duckdb")
 
