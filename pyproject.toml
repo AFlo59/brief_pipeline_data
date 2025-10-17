@@ -107,6 +107,11 @@ prerelease = true                 # true = versions avec suffixe
 # prerelease_token = "rc"           # Suffixe utilisé pour les pré-releases
 # Exemples de versions créées sur develop: 1.0.0-rc.1, 1.0.0-rc.2, 1.1.0-rc.1
 
+[tool.semantic_release.branches."feature/*"]
+match = "feature/*"
+prerelease = true
+prerelease_token = "alpha"   # ex: versions du type 1.2.0-alpha.1
+
 # =============================================================================
 # SEMANTIC RELEASE - ANALYSE DES COMMITS
 # =============================================================================
