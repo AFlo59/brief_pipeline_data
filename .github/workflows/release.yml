@@ -54,8 +54,5 @@ jobs:
         env:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: |
-          # une commande suffit (analyze -> version -> publish)
-          semantic-release --verbosity=DEBUG
-          # ou garde tes deux lignes:
-          # semantic-release version --changelog
-          # semantic-release publish
+          semantic-release version --changelog --verbose
+          semantic-release publish --verbose
