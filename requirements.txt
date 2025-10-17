@@ -1,0 +1,5 @@
+requests==2.31.0
+pandas==2.3.3
+numpy==2.3.4
+pyarrow==15.0.0
+fastparquet==2024.2.0
