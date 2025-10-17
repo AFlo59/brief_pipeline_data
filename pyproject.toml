@@ -19,12 +19,12 @@ description = "Semantic release for Python packages"
 readme = "README.md"
 
 # Version minimale de Python requise pour utiliser ce package
-requires-python = ">=3.13"
+requires-python = ">=3.12"
 
 # Liste des dépendances nécessaires au fonctionnement du package
 # Format: "nom-package>=version-minimale"
 dependencies = [
-    "pandas>=2.3.3",
+    "pandas>=2.3.3",++
 ]
 
 # =============================================================================
