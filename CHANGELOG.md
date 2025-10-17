@@ -6,13 +6,13 @@
 
 ### Bug Fixes
 
-- Correction semantics pour feature/branchs
+- Correction semantics pour feature/branches
   ([`1a6cdb8`](https://github.com/AFlo59/brief_pipeline_data/commit/1a6cdb88a00c0149120cef2040877c59408cc231))
 
-- Correction semantics pour feature/branchs
+- Correction semantics pour feature/branches
   ([`ddfac1e`](https://github.com/AFlo59/brief_pipeline_data/commit/ddfac1e4f3ff0ae5446c214150d5967ed5f35da4))
 
-- Correction semantics pour feature/branchs
+- Correction semantics pour feature/branches
   ([`85df32d`](https://github.com/AFlo59/brief_pipeline_data/commit/85df32d97861cbbfd57b9b6df024ceada4aa0264))
 
 ### Features
