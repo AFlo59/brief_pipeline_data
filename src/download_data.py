@@ -142,7 +142,7 @@ class NYCTaxiDataDownloader:
         skipped = 0
         failed = 0
 
-        print(f"[info] Téléchargement {self.YEAR}-01 → {self.YEAR}-{last_month:02d} vers {self.DATA_DIR}")
+        print(f"[info] Telechargement {self.YEAR}-01 -> {self.YEAR}-{last_month:02d} vers {self.DATA_DIR}")
 
         for m in range(1, last_month + 1):
             already = self.file_exists(m)
@@ -157,8 +157,8 @@ class NYCTaxiDataDownloader:
                 failed += 1
 
         print(
-            f"[sum ] Année {self.YEAR} → présents: {len(present_files)} | "
-            f"créés: {created} | déjà là: {skipped} | échecs: {failed}"
+            f"[sum ] Annee {self.YEAR} -> presents: {len(present_files)} | "
+            f"crees: {created} | deja la: {skipped} | echecs: {failed}"
         )
         return present_files
 
