@@ -54,28 +54,15 @@ jobs:
         env:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: |
-          # Créer un fichier de configuration temporaire pour désactiver le push
-          cat > semantic-release-config.toml << EOF
-          [tool.semantic_release]
-          push = false
-          tag = true
-          commit = true
-          upload_to_pypi = false
-          upload_to_release = true
-          EOF
-          
-          # Utiliser la configuration temporaire
-          export SEMANTIC_RELEASE_CONFIG_FILE=semantic-release-config.toml
-          
           # Générer la version et le changelog
           semantic-release --verbose version --changelog
           
           # Construire les packages
           semantic-release --verbose publish
           
-          # Créer le commit et tag localement
+          # Créer le commit et tag localement (pour les branches protégées)
           git add .
           git commit -m "chore: release version $(python -c "import toml; print(toml.load('pyproject.toml')['project']['version'])")" || echo "No changes to commit"
           git tag "v$(python -c "import toml; print(toml.load('pyproject.toml')['project']['version'])")" || echo "Tag already exists"
           
-          echo "Release completed successfully without pushing to remote"
+          echo "Release completed successfully"
