@@ -66,42 +66,60 @@ def main():
     print("ETAPE 1: GENERATION VERSION ET CHANGELOG")
     print("="*50)
     
-    result = subprocess.run(
-        "python -m semantic_release version --changelog",
-        shell=True,
-        capture_output=True,
-        text=True
-    )
-    
-    if result.stdout and "The next version is:" in result.stdout:
-        print("[SUCCESS] Version generee avec succes!")
-        print("Sortie:", result.stdout)
-    else:
-        print("[ERROR] Echec de la generation de version")
-        print("Sortie:", result.stdout)
-        print("Erreur:", result.stderr)
-        print("\n[INFO] Continuation quand meme...")
+    try:
+        result = subprocess.run(
+            "python -m semantic_release version --changelog",
+            shell=True,
+            capture_output=True,
+            text=True,
+            timeout=60  # Timeout de 60 secondes
+        )
+        
+        if result.stdout and "The next version is:" in result.stdout:
+            print("[SUCCESS] Version generee avec succes!")
+            print("Sortie:", result.stdout)
+        else:
+            print("[ERROR] Echec de la generation de version")
+            print("Sortie:", result.stdout)
+            print("Erreur:", result.stderr)
+            print("\n[INFO] Continuation quand meme...")
+            
+    except subprocess.TimeoutExpired:
+        print("[ERROR] Timeout - La commande a pris trop de temps")
+        print("[INFO] Continuation quand meme...")
+    except Exception as e:
+        print(f"[ERROR] Erreur inattendue: {e}")
+        print("[INFO] Continuation quand meme...")
     
     # Étape 2: Build
     print("\n" + "="*50)
     print("ETAPE 2: CONSTRUCTION DES PACKAGES")
     print("="*50)
     
-    result = subprocess.run(
-        "python -m semantic_release publish",
-        shell=True,
-        capture_output=True,
-        text=True
-    )
-    
-    if "Build completed successfully" in result.stdout or "Successfully built" in result.stdout:
-        print("[SUCCESS] Construction reussie!")
-        print("Sortie:", result.stdout)
-    else:
-        print("[ERROR] Echec de la construction")
-        print("Sortie:", result.stdout)
-        print("Erreur:", result.stderr)
-        print("\n[INFO] Continuation quand meme...")
+    try:
+        result = subprocess.run(
+            "python -m semantic_release publish",
+            shell=True,
+            capture_output=True,
+            text=True,
+            timeout=60  # Timeout de 60 secondes
+        )
+        
+        if "Build completed successfully" in result.stdout or "Successfully built" in result.stdout:
+            print("[SUCCESS] Construction reussie!")
+            print("Sortie:", result.stdout)
+        else:
+            print("[ERROR] Echec de la construction")
+            print("Sortie:", result.stdout)
+            print("Erreur:", result.stderr)
+            print("\n[INFO] Continuation quand meme...")
+            
+    except subprocess.TimeoutExpired:
+        print("[ERROR] Timeout - La commande a pris trop de temps")
+        print("[INFO] Continuation quand meme...")
+    except Exception as e:
+        print(f"[ERROR] Erreur inattendue: {e}")
+        print("[INFO] Continuation quand meme...")
     
     # Étape 3: Commit et tag
     print("\n" + "="*50)
