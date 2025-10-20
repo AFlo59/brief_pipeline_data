@@ -2,6 +2,14 @@
 
 <!-- version list -->
 
+## v1.1.0-rc.2 (2025-10-20)
+
+### Bug Fixes
+
+- Again the fix
+  ([`712f89f`](https://github.com/AFlo59/brief_pipeline_data/commit/712f89f75bb16d848453e14f42e9b42c3eff361c))
+
+
 ## v1.1.0-alpha.3 (2025-10-20)
 
 ### Bug Fixes

@@ -9,7 +9,7 @@ name = "semantic-release"
 # Version actuelle du package - ATTENTION: Cette valeur est automatiquement
 # mise à jour par semantic-release lors d'un release. Ne la modifiez pas manuellement.
 
-version = "1.1.0-alpha.3"
+version = "1.1.0-rc.2"
 
 # Description courte qui apparaît dans les métadonnées du package
 description = "Semantic release for Python packages"
@@ -121,6 +121,7 @@ prerelease = false                # false = versions stables (1.0.0, 1.1.0, 2.0.
 [tool.semantic_release.branches.develop]
 match = "develop"                 # Nom de la branche à matcher
 prerelease = true                 # true = versions avec suffixe
+push = false                      # DÉSACTIVE le push pour éviter les erreurs de branches protégées
 # prerelease_token = "rc"           # Suffixe utilisé pour les pré-releases
 # Exemples de versions créées sur develop: 1.0.0-rc.1, 1.0.0-rc.2, 1.1.0-rc.1
 
