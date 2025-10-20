@@ -9,7 +9,7 @@ name = "semantic-release"
 # Version actuelle du package - ATTENTION: Cette valeur est automatiquement
 # mise à jour par semantic-release lors d'un release. Ne la modifiez pas manuellement.
 
-version = "1.1.0-rc.1"
+version = "1.1.0-alpha.3"
 
 # Description courte qui apparaît dans les métadonnées du package
 description = "Semantic release for Python packages"
@@ -19,7 +19,7 @@ description = "Semantic release for Python packages"
 readme = "README.md"
 
 # Version minimale de Python requise pour utiliser ce package
-requires-python = ">=3.13"
+requires-python = ">=3.12"
 
 # Liste des dépendances nécessaires au fonctionnement du package
 # Format: "nom-package>=version-minimale"
@@ -90,6 +90,23 @@ upload_to_pypi = false
 upload_to_release = true
 
 # =============================================================================
+# CONFIGURATION POUR BRANCHES PROTÉGÉES
+# =============================================================================
+# Configuration pour éviter les erreurs avec les branches protégées GitHub
+
+# Si true, ne pousse pas automatiquement les changements vers le remote
+# Utile pour les branches protégées qui nécessitent des PR
+push = false
+
+# Si true, ne crée pas de tag automatiquement
+# Utile quand on veut contrôler manuellement le processus de release
+tag = true
+
+# Si true, ne crée pas de commit automatiquement
+# Utile pour les workflows où on veut créer le commit manuellement
+commit = true
+
+# =============================================================================
 # SEMANTIC RELEASE - CONFIGURATION DES BRANCHES
 # =============================================================================
 # Définit comment chaque branche gère les releases
@@ -106,6 +123,11 @@ match = "develop"                 # Nom de la branche à matcher
 prerelease = true                 # true = versions avec suffixe
 # prerelease_token = "rc"           # Suffixe utilisé pour les pré-releases
 # Exemples de versions créées sur develop: 1.0.0-rc.1, 1.0.0-rc.2, 1.1.0-rc.1
+
+[tool.semantic_release.branches."feature/*"]
+match = "feature/*"
+prerelease = true
+prerelease_token = "alpha"   # ex: versions du type 1.2.0-alpha.1
 
 # =============================================================================
 # SEMANTIC RELEASE - ANALYSE DES COMMITS
