@@ -37,6 +37,9 @@ RUN pip install --no-cache-dir --upgrade pip && \
 COPY src/ ./src/
 COPY scripts/ ./scripts/
 
+# Copier le fichier .env.example et le renommer en .env
+COPY .env.example .env
+
 # Créer le répertoire pour les données et donner les permissions
 RUN mkdir -p /app/data/raw && \
     chown -R appuser:appuser /app

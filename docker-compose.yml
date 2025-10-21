@@ -57,6 +57,8 @@ services:
     command: >
       sh -c "
         python scripts/wait_for_db.py &&
+        echo 'Téléchargement des données...' &&
+        python src/download_data.py &&
         echo 'Import initial (dédup via import_log)...' &&
         python src/import_to_postgres.py &&
         echo 'Démarrage de l application...' &&

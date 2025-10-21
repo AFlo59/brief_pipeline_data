@@ -7,6 +7,7 @@ from typing import Optional, Iterable
 import pandas as pd
 from fastparquet import ParquetFile
 from sqlalchemy.orm import Session
+from sqlalchemy import func
 
 from src.database import SessionLocal, init_db, check_db_connection
 from src.models import YellowTaxiTrip, ImportLog
@@ -210,8 +211,8 @@ class PostgresImporter:
             
             # Plage de dates
             result = db.query(
-                db.func.min(YellowTaxiTrip.tpep_pickup_datetime),
-                db.func.max(YellowTaxiTrip.tpep_dropoff_datetime)
+                func.min(YellowTaxiTrip.tpep_pickup_datetime),
+                func.max(YellowTaxiTrip.tpep_dropoff_datetime)
             ).first()
             
             if result and result[0]:
@@ -220,8 +221,8 @@ class PostgresImporter:
             
             # Statistiques financières
             fare_stats = db.query(
-                db.func.sum(YellowTaxiTrip.total_amount),
-                db.func.avg(YellowTaxiTrip.trip_distance)
+                func.sum(YellowTaxiTrip.total_amount),
+                func.avg(YellowTaxiTrip.trip_distance)
             ).first()
             
             if fare_stats:
