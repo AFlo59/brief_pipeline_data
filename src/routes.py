@@ -1,5 +1,6 @@
 from __future__ import annotations
 
+from pathlib import Path
 from typing import List
 from fastapi import APIRouter, Depends, HTTPException, status
 from sqlalchemy.orm import Session
@@ -194,7 +195,7 @@ def run_pipeline(db: Session = Depends(get_db)):
         # Étape 2: Import des données
         print("[PIPELINE] Début de l'import des données...")
         importer = PostgresImporter()
-        data_dir_path = importer.raw_data_dir
+        data_dir_path = Path("/app/data/raw")  # Chemin dans le conteneur
         imported_files = importer.import_all_parquet_files(data_dir_path)
         
         # Calculer la durée
@@ -282,7 +283,7 @@ def import_data(db: Session = Depends(get_db)):
         
         print("[PIPELINE] Début de l'import des données...")
         importer = PostgresImporter()
-        data_dir_path = importer.raw_data_dir
+        data_dir_path = Path("/app/data/raw")  # Chemin dans le conteneur
         imported_files = importer.import_all_parquet_files(data_dir_path)
         
         duration = time.time() - start_time
