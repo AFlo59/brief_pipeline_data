@@ -3,4 +3,11 @@ numpy==2.3.4
 pandas==2.3.3
 fastparquet==2024.11.0
 duckdb==1.1.2
-python-semantic-release==9.0.0
+python-semantic-release==10.4.0
+psycopg2-binary==2.9.9
+sqlalchemy==2.0.25
+fastapi==0.104.1
+uvicorn[standard]==0.24.0
+python-multipart==0.0.6
+fastapi
+uvicorn
