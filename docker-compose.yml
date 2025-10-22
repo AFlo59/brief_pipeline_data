@@ -22,6 +22,35 @@ services:
     networks:
       - nyc-taxi-network
 
+  mongodb:
+    image: mongo:7
+    container_name: nyc-taxi-mongodb
+    environment:
+      MONGO_INITDB_ROOT_USERNAME: ${MONGO_USER:-admin}
+      MONGO_INITDB_ROOT_PASSWORD: ${MONGO_PASSWORD:-admin}
+      MONGO_INITDB_DATABASE: ${MONGO_DB:-nyc_taxi_clean}
+    ports:
+      - "27017:27017"
+    volumes:
+      - mongodb_data:/data/db
+    command: >
+      mongod 
+      --quiet 
+      --bind_ip_all
+      --logpath /dev/null
+      --logappend
+    healthcheck:
+      test: ["CMD", "mongosh", "--quiet", "--eval", "db.adminCommand('ping')"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+      start_period: 30s
+    restart: unless-stopped
+    networks:
+      - nyc-taxi-network
+    logging:
+      driver: "none"
+
   app:
     build:
       context: .
@@ -44,24 +73,36 @@ services:
       # Configuration des données
       DATA_DIR: /app/data
       RAW_DATA_DIR: /app/data/raw
+      
+      # Configuration du traitement par chunks
+      CHUNK_SIZE: ${CHUNK_SIZE:-25000}
     ports:
       - "8000:8000"
     volumes:
-      # Montage des données pour l'accès aux fichiers Parquet
-      - ./data:/app/data:ro
+      # Montage des données pour l'accès aux fichiers Parquet (lecture/écriture)
+      - ./data:/app/data
       # Montage du code source pour le développement (hot reload)
       - ./src:/app/src:ro
     depends_on:
       postgres:
         condition: service_healthy
+      mongodb:
+        condition: service_healthy
     command: >
       sh -c "
+        echo '🚀 Démarrage du pipeline NYC Taxi Data...' &&
+        echo '📁 Étape 1: Vérification des répertoires...' &&
+        python scripts/ensure_directories.py &&
+        echo '📊 Étape 2: Vérification des bases de données...' &&
         python scripts/wait_for_db.py &&
-        echo 'Téléchargement des données...' &&
+        echo '📥 Étape 3: Téléchargement des données...' &&
         python src/download_data.py &&
-        echo 'Import initial (dédup via import_log)...' &&
+        echo '💾 Étape 4: Import PostgreSQL (avec déduplication)...' &&
         python src/import_to_postgres.py &&
-        echo 'Démarrage de l application...' &&
+        echo '🔄 Étape 5: Nettoyage et import MongoDB...' &&
+        python scripts/wait_for_mongodb.py &&
+        python src/data_cleaner.py &&
+        echo '🌐 Étape 6: Démarrage de l application FastAPI...' &&
         uvicorn src.main:app --host 0.0.0.0 --port 8000 --reload
       "
     restart: unless-stopped
@@ -101,6 +142,8 @@ services:
 
 volumes:
   postgres_data:
+    driver: local
+  mongodb_data:
     driver: local
 
 networks:
