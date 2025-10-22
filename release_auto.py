@@ -8,7 +8,6 @@ import subprocess
 import sys
 import os
 from pathlib import Path
-import toml
 import re
 
 
@@ -37,8 +36,16 @@ def get_current_version():
     """Récupère la version actuelle depuis pyproject.toml."""
     try:
         with open("pyproject.toml", "r", encoding="utf-8") as f:
-            config = toml.load(f)
-        return config["project"]["version"]
+            content = f.read()
+        
+        # Chercher la ligne version = "X.X.X"
+        pattern = r'version = "([^"]*)"'
+        match = re.search(pattern, content)
+        if match:
+            return match.group(1)
+        else:
+            print("[ERROR] Version non trouvée dans pyproject.toml")
+            return "1.0.0"
     except Exception as e:
         print(f"[ERROR] Impossible de lire la version: {e}")
         return "1.0.0"
@@ -121,9 +128,15 @@ def main():
     print("CONSTRUCTION DES PACKAGES")
     print("="*50)
     
+    # Essayer d'abord uv, puis fallback sur pip + build
     if not run_command("uv build", "Construction avec uv"):
-        print("[ERROR] Echec de la construction")
-        sys.exit(1)
+        print("[INFO] uv non disponible, utilisation de pip + build...")
+        if not run_command("pip install build", "Installation de build"):
+            print("[ERROR] Impossible d'installer build")
+            sys.exit(1)
+        if not run_command("python -m build", "Construction avec python -m build"):
+            print("[ERROR] Echec de la construction")
+            sys.exit(1)
     
     # Créer le commit
     print("\n" + "="*50)
