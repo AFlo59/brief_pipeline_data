@@ -11,14 +11,14 @@ from pathlib import Path
 
 def ensure_data_directories():
     """
-    Vérifie et crée les répertoires de données nécessaires.
+    Vérifie et crée les répertoires de données nécessaires dans le conteneur.
     
     Returns:
         bool: True si tous les répertoires sont prêts, False sinon
     """
-    print("📁 Vérification des répertoires de données...")
+    print("📁 Vérification des répertoires de données dans le conteneur...")
     
-    # Répertoires à vérifier/créer
+    # Répertoires à vérifier/créer dans le conteneur
     directories = [
         "data",
         "data/raw",

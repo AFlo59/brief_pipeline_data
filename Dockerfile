@@ -41,7 +41,7 @@ COPY scripts/ ./scripts/
 COPY .env.example .env
 
 # Créer le répertoire pour les données et donner les permissions
-RUN mkdir -p /app/data/raw && \
+RUN mkdir -p /app/data/raw /app/data/database && \
     chown -R appuser:appuser /app
 
 # Changer vers l'utilisateur non-root

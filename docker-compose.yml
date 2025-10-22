@@ -79,8 +79,8 @@ services:
     ports:
       - "8000:8000"
     volumes:
-      # Montage des données pour l'accès aux fichiers Parquet (lecture/écriture)
-      - ./data:/app/data
+      # Utilisation d'un volume Docker nommé pour les données (créé automatiquement)
+      - nyc_taxi_data:/app/data
       # Montage du code source pour le développement (hot reload)
       - ./src:/app/src:ro
     depends_on:
@@ -144,6 +144,8 @@ volumes:
   postgres_data:
     driver: local
   mongodb_data:
+    driver: local
+  nyc_taxi_data:
     driver: local
 
 networks:
