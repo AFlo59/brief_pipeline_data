@@ -32,6 +32,34 @@ def run_command(cmd, description, check=True):
         return False, e
 
 
+def check_dependencies():
+    """Vérifie que les dépendances nécessaires sont installées."""
+    print("VÉRIFICATION DES DÉPENDANCES")
+    print("=" * 50)
+    
+    # Vérifier semantic-release
+    success, result = run_command("which semantic-release", "Vérification de semantic-release", check=False)
+    if not success or "not found" in result.stderr:
+        print("\n❌ semantic-release n'est pas installé!")
+        print("\n📦 Solutions:")
+        print("1. Avec pip:")
+        print("   pip install python-semantic-release")
+        print("\n2. Avec uv:")
+        print("   uv add python-semantic-release")
+        print("\n3. Avec conda:")
+        print("   conda install -c conda-forge python-semantic-release")
+        return False
+    
+    # Vérifier uv
+    success, result = run_command("which uv", "Vérification de uv", check=False)
+    if not success or "not found" in result.stderr:
+        print("\n⚠️  uv n'est pas installé, utilisation de pip à la place")
+        return True
+    
+    print("✅ Toutes les dépendances sont disponibles")
+    return True
+
+
 def get_current_version():
     """Récupère la version actuelle depuis pyproject.toml."""
     try:
@@ -59,6 +87,11 @@ def main():
     # Vérifier qu'on est dans un repo Git
     if not Path(".git").exists():
         print("[ERROR] Pas dans un repository Git!")
+        sys.exit(1)
+    
+    # Vérifier les dépendances
+    if not check_dependencies():
+        print("\n❌ Dépendances manquantes. Veuillez les installer avant de continuer.")
         sys.exit(1)
     
     # Vérifier la branche actuelle
@@ -92,10 +125,18 @@ def main():
     print("CONSTRUCTION DES PACKAGES")
     print("="*50)
     
-    success, _ = run_command("uv build", "Construction des packages")
+    # Essayer d'abord uv, puis fallback sur pip + build
+    success, _ = run_command("uv build", "Construction avec uv", check=False)
     if not success:
-        print("[ERROR] Échec de la construction des packages")
-        sys.exit(1)
+        print("[INFO] uv non disponible, utilisation de pip + build...")
+        success, _ = run_command("pip install build", "Installation de build", check=False)
+        if not success:
+            print("[ERROR] Impossible d'installer build")
+            sys.exit(1)
+        success, _ = run_command("python -m build", "Construction avec python -m build")
+        if not success:
+            print("[ERROR] Échec de la construction des packages")
+            sys.exit(1)
     
     # Créer le commit
     print("\n" + "="*50)
