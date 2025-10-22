@@ -50,19 +50,43 @@ jobs:
           git config user.name "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
 
-      - name: Semantic Release
+      - name: Semantic Release - Version Only
         env:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: |
-          # Générer la version et le changelog
+          # Générer la version et le changelog seulement
           semantic-release --verbose version --changelog
           
-          # Construire les packages
-          semantic-release --verbose publish
+          echo "Version generation completed"
+
+      - name: Build Packages
+        run: |
+          # Construire les packages manuellement
+          uv build
           
-          # Créer le commit et tag localement (pour les branches protégées)
+          echo "Package build completed"
+
+      - name: Create Release Commit and Tag
+        run: |
+          # Créer le commit et tag localement
           git add .
           git commit -m "chore: release version $(python -c "import toml; print(toml.load('pyproject.toml')['project']['version'])")" || echo "No changes to commit"
           git tag "v$(python -c "import toml; print(toml.load('pyproject.toml')['project']['version'])")" || echo "Tag already exists"
           
-          echo "Release completed successfully"
+          echo "Commit and tag created locally"
+
+      - name: Handle Protected Branch
+        if: github.ref == 'refs/heads/develop'
+        run: |
+          echo "Branch develop is protected. Changes are ready for manual review."
+          echo "Please create a Pull Request to merge these changes."
+          echo "Current version: $(python -c "import toml; print(toml.load('pyproject.toml')['project']['version'])")"
+
+      - name: Push to Non-Protected Branch
+        if: github.ref != 'refs/heads/develop'
+        run: |
+          echo "Pushing changes to non-protected branch..."
+          git push origin ${{ github.ref_name }}
+          git push origin --tags
+          
+          echo "Changes pushed successfully"

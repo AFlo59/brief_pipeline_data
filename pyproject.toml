@@ -69,6 +69,7 @@ version_toml = ["pyproject.toml:project.version"]
 
 # Commande exécutée lors de la création d'un release
 # Cette commande est exécutée APRÈS la mise à jour de la version
+# Note: Le build est maintenant géré séparément dans le workflow GitHub Actions
 build_command = """
 uv lock --upgrade-package semantic-release-python-uv
 git add uv.lock
@@ -88,6 +89,10 @@ upload_to_pypi = false
 
 # Si true, crée une GitHub Release et y attache les artifacts de build
 upload_to_release = true
+
+# Si true, ne pousse pas automatiquement les changements vers le remote
+# Utile pour les branches protégées qui nécessitent des PR
+push = false
 
 # =============================================================================
 # CONFIGURATION POUR BRANCHES PROTÉGÉES
