@@ -9,7 +9,7 @@ name = "semantic-release"
 # Version actuelle du package - ATTENTION: Cette valeur est automatiquement
 # mise à jour par semantic-release lors d'un release. Ne la modifiez pas manuellement.
 
-version = "1.1.0-rc.6"
+version = "1.1.0-rc.5"
 
 # Description courte qui apparaît dans les métadonnées du package
 description = "Semantic release for Python packages"
@@ -98,10 +98,6 @@ push = false
 # CONFIGURATION POUR BRANCHES PROTÉGÉES
 # =============================================================================
 # Configuration pour éviter les erreurs avec les branches protégées GitHub
-
-# Si true, ne pousse pas automatiquement les changements vers le remote
-# Utile pour les branches protégées qui nécessitent des PR
-push = false
 
 # Si true, ne crée pas de tag automatiquement
 # Utile quand on veut contrôler manuellement le processus de release
